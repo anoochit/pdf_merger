@@ -80,6 +80,6 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 msix_config:
-  display_name: winapp
+  display_name: PDFPermission
   msix_version: 1.0.0.0
   install_certificate: false
