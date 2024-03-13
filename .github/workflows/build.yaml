@@ -22,4 +22,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{secrets.TOKEN}}
         with:
-          files: build/windows/x64/runner/Release/pdfpermission.msix
+          files: build/windows/x64/runner/Release/pdfmerge.msix

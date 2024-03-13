@@ -3,8 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:pdfpermission/app/modules/home/controllers/home_controller.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+
+import '../controllers/home_controller.dart';
 
 class PdfViewerView extends GetView<HomeController> {
   const PdfViewerView({super.key});

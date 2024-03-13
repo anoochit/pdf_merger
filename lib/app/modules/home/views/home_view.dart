@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
-import 'package:pdfpermission/app/modules/home/views/pdf_view_view.dart';
 
 import '../controllers/home_controller.dart';
 import 'list_files_view.dart';
 import 'pdf_config_view.dart';
+import 'pdf_view_view.dart';
 import 'toolbox_view.dart';
 
 class HomeView extends GetView<HomeController> {

@@ -1,9 +1,9 @@
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:pdfpermission/app/modules/home/controllers/home_controller.dart';
+
+import '../controllers/home_controller.dart';
 
 class ListFilesView extends GetView<HomeController> {
   const ListFilesView({super.key});
