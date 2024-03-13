@@ -78,7 +78,7 @@ class PdfConfigView extends GetView<HomeController> {
                       },
                     );
                     return const AlertDialog(
-                      content: Text('Processing...'),
+                      content: Text('Waiting for processing...'),
                     );
                   },
                 );

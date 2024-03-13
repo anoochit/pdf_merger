@@ -19,7 +19,7 @@ class PdfViewerView extends GetView<HomeController> {
             ),
           )
         : const Center(
-            child: Text('no file'),
+            child: Text('Tap file to view'),
           ));
   }
 }
