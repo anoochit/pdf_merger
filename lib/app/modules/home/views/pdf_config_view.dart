@@ -54,42 +54,73 @@ class PdfConfigView extends GetView<HomeController> {
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
           child: SizedBox(
             width: double.maxFinite,
-            child: FilledButton.icon(
-              onPressed: () async {
-                // FIXME: Change to isolate process
-                // merge message
-                MergeMessage mergeMessage = MergeMessage(
-                  ownerPassword: ownerPasswordController.text,
-                  filePaths: controller.listFiles
-                      .map((element) => element.path!)
-                      .toList(),
-                  listPermissions: controller.listPermissions,
-                  pdfPermissions: controller.pdfPermissions,
-                );
-
-                // show dialog
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    Future.delayed(const Duration(seconds: 2)).then(
-                      (value) {
-                        mergePdf(mergeMessage).then(
-                          (value) => Get.back(),
-                        );
-                      },
-                    );
-                    return const AlertDialog(
-                      content: Text('Waiting for processing...'),
-                    );
-                  },
-                );
-              },
-              icon: const Icon(Icons.play_arrow),
-              label: const Text('Merge'),
+            child: Obx(
+              () => FilledButton.icon(
+                onPressed: (controller.listFiles.length > 0)
+                    ? () => merge(context)
+                    : null,
+                icon: const Icon(Icons.play_arrow),
+                label: const Text('Merge'),
+              ),
             ),
           ),
         ),
       ],
+    );
+  }
+
+  merge(BuildContext context) async {
+    // FIXME: Change to isolate process
+    // merge message
+    // get path
+    final appPath = await getApplicationDocumentsDirectory();
+    final path = appPath.path;
+
+    // open file and write file
+    final filename =
+        '$path/export_${DateTime.now().millisecondsSinceEpoch}.pdf';
+    MergeMessage mergeMessage = MergeMessage(
+      ownerPassword: ownerPasswordController.text,
+      filePaths: controller.listFiles.map((element) => element.path!).toList(),
+      listPermissions: controller.listPermissions,
+      pdfPermissions: controller.pdfPermissions,
+      exportFile: filename,
+    );
+
+    // show dialog
+    showDialog(
+      context: context,
+      builder: (context) {
+        Future.delayed(const Duration(seconds: 2)).then(
+          (value) async {
+            final result = await mergePdf(mergeMessage);
+            log('merge result = $result');
+            Get.back();
+            if (result == true) {
+              Get.snackbar(
+                'Info',
+                'Merge complete at $filename',
+                backgroundColor: Colors.green,
+                maxWidth: 640,
+                margin: EdgeInsets.only(
+                    top: 8, left: MediaQuery.of(context).size.width - 640 - 8),
+              );
+            } else {
+              Get.snackbar(
+                'Error',
+                'Error while merging files',
+                backgroundColor: Colors.red,
+                maxWidth: 640,
+                margin: EdgeInsets.only(
+                    top: 8, left: MediaQuery.of(context).size.width - 640 - 8),
+              );
+            }
+          },
+        );
+        return const AlertDialog(
+          content: Text('Waiting for processing...'),
+        );
+      },
     );
   }
 }
@@ -99,12 +130,14 @@ class MergeMessage {
   final List<String> filePaths;
   final List<bool> listPermissions;
   final List<PdfPermissionsFlags> pdfPermissions;
+  final String exportFile;
 
   MergeMessage({
     required this.ownerPassword,
     required this.filePaths,
     required this.listPermissions,
     required this.pdfPermissions,
+    required this.exportFile,
   });
 }
 
@@ -132,10 +165,6 @@ Future<bool> mergePdf(MergeMessage mergeMessage) async {
       }
     }
 
-    // get path
-    final appPath = await getApplicationDocumentsDirectory();
-    final path = appPath.path;
-
     // save the document
     document.compressionLevel = PdfCompressionLevel.best;
 
@@ -162,13 +191,11 @@ Future<bool> mergePdf(MergeMessage mergeMessage) async {
     // dispose the document
     document.dispose();
 
-    // open file and write file
-    final filename =
-        '$path/export_${DateTime.now().millisecondsSinceEpoch}.pdf';
-
-    log(filename);
-    final file = File(filename);
+    log(mergeMessage.exportFile);
+    final file = File(mergeMessage.exportFile);
     await file.writeAsBytes(bytes);
+
+    Get.back();
 
     return true;
   } catch (e) {
