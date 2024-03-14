@@ -56,6 +56,7 @@ class PdfConfigView extends GetView<HomeController> {
             width: double.maxFinite,
             child: FilledButton.icon(
               onPressed: () async {
+                // FIXME: Change to isolate process
                 // merge message
                 MergeMessage mergeMessage = MergeMessage(
                   ownerPassword: ownerPasswordController.text,
