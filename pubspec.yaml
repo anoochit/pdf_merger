@@ -28,6 +28,7 @@ flutter:
   uses-material-design: true
 
 msix_config:
-  display_name: PDFPermission
+  display_name: PDFMerger
+  logo_path: assets\launcher.png
   msix_version: 1.1.0.0
   install_certificate: false
