@@ -4,6 +4,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
@@ -94,6 +95,15 @@ class PdfConfigView extends GetView<HomeController> {
         Future.delayed(const Duration(seconds: 2)).then(
           (value) async {
             final result = await mergePdf(mergeMessage);
+
+            final audioPlayer = AudioPlayer();
+            audioPlayer.play(
+              AssetSource(
+                "sound.mp3",
+                mimeType: "audio/mpeg",
+              ),
+            );
+
             log('merge result = $result');
             Get.back();
             if (result == true) {
