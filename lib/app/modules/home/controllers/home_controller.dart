@@ -29,4 +29,6 @@ class HomeController extends GetxController {
   ];
 
   RxString previewFile = ''.obs;
+
+  RxBool showPassword = true.obs;
 }

@@ -25,14 +25,23 @@ class PdfConfigView extends GetView<HomeController> {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: TextFormField(
-            controller: ownerPasswordController,
-            decoration: const InputDecoration(
-              hintText: 'Owner password',
-              prefixIcon: Icon(Icons.password),
+          child: Obx(
+            () => TextFormField(
+              controller: ownerPasswordController,
+              decoration: InputDecoration(
+                hintText: 'Owner password',
+                prefixIcon: const Icon(Icons.password),
+                suffixIcon: IconButton(
+                  onPressed: () => controller.showPassword.value =
+                      !controller.showPassword.value,
+                  icon: (controller.showPassword.value)
+                      ? const Icon(Icons.visibility)
+                      : const Icon(Icons.visibility_off),
+                ),
+              ),
+              showCursor: true,
+              obscureText: controller.showPassword.value,
             ),
-            showCursor: true,
-            obscureText: true,
           ),
         ),
         Expanded(
@@ -57,7 +66,7 @@ class PdfConfigView extends GetView<HomeController> {
             width: double.maxFinite,
             child: Obx(
               () => FilledButton.icon(
-                onPressed: (controller.listFiles.length > 0)
+                onPressed: (controller.listFiles.isNotEmpty)
                     ? () => merge(context)
                     : null,
                 icon: const Icon(Icons.play_arrow),
